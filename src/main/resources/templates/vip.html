@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <title>网上购物系统</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/vip.css">
+</head>
+
+<body>
+
+<!--顶部导航-->
+<div th:replace="../templates/top-part"></div>
+
+<div class="container">
+<header>开通VIP，享巨大优惠</header>
+<div id="app">
+    <div class="box">
+        <a href="javascript:void(0);" onclick="reviseVIP(1)">
+            <div class="imgBox">
+                <img src="images/vip1.png" alt="" style="width: 280px;height: 220px;z-index: 1000">
+            </div>
+            <span class="source">点击开通</span>
+            <h2 class="title">普通会员</h2>
+            <span class="detail">普通会员享受全场9折优惠，优惠多多不容错过哦！</span>
+        </a>
+    </div>
+    <div class="box">
+        <a href="javascript:void(0);" onclick="reviseVIP(2)">
+            <div class="imgBox">
+                <img src="images/vip2.png" alt="" style="width: 280px;height: 220px;z-index: 1000">
+            </div>
+            <span class="source">点击开通</span>
+            <h2 class="title">精品会员</h2>
+            <span class="detail">精品会员享受全场8折优惠，优惠多多不容错过哦！</span>
+        </a>
+    </div>
+    <div class="box">
+        <a href="javascript:void(0);" onclick="reviseVIP(3)">
+            <div class="imgBox">
+                <img src="images/vip3.png" alt="" style="width: 280px;height: 220px;z-index: 1000">
+            </div>
+            <span class="source">点击开通</span>
+            <h2 class="title">铂金会员</h2>
+            <span class="detail">铂金会员享受全场7折优惠，优惠多多不容错过哦！</span>
+        </a>
+    </div>
+    <div class="box">
+        <a href="javascript:void(0);" onclick="reviseVIP(4)">
+            <div class="imgBox">
+                <img src="images/vip4.png" alt="" style="width: 280px;height: 220px;z-index: 1000">
+            </div>
+            <span class="source">点击开通</span>
+            <h2 class="title">钻石会员</h2>
+            <span class="detail">钻石会员享受全场5折优惠，优惠多多不容错过哦！</span>
+        </a>
+    </div>
+</div>
+</div>
+</body>
+
+<script src="/js/jquery-1.11.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function reviseVIP(state) {
+        window.location.href="/VIPalipay?level="+state;
+    }
+</script>
+
+</html>

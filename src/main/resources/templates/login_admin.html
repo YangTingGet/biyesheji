@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<link rel="stylesheet" href="/css/login.css" />
+	<body>
+		<div id="particles-js" style="background-image: url(/images/bjt.jpg)">
+			<div class="login">
+			<div class="login-top">
+				登录
+			</div>
+			<div class="login-center clearfix">
+				<div class="login-center-img"><img src="/images/name.png" alt=""></div>
+				<div class="login-center-input">
+					<input type="text" id="name" name="" value="" placeholder="请输入您的用户名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'" />
+					<div class="login-center-input-text">用户名</div>
+				</div>
+			</div>
+			<div class="login-center clearfix">
+				<div class="login-center-img"><img src="/images/password.png" alt=""></div>
+				<div class="login-center-input">
+					<input type="password" id="password" name="" value="" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'" />
+					<div class="login-center-input-text">密码</div>
+				</div>
+			</div>
+			<div class="login-button" id="goSys">
+				登陆
+			</div>
+		</div>
+		</div>
+		
+	</body>
+	<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+	<!--<script src="js/common/particles.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/common/app.js" type="text/javascript" charset="utf-8"></script>-->
+    <script type="text/javascript">
+		$("#goSys").click(function () {
+			var name=$("#name").val();
+			var password=$("#password").val();
+			$.ajax({
+				url:"/adminCheck",
+				type:"post",
+				data:{adminName:name,password:password},
+				success:function (data) {
+					if (data =="1"){
+						alert("登录成功");
+						window.location.href="/system/getAllBooks";
+					} else {
+						alert("登录失败");
+						window.location.reload();
+					}
+				}
+
+			})
+		})
+    </script>
+</html>

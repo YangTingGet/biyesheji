@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>购物车</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <style>
+        .bookPic{
+            height: 200px;
+            margin: 20px;
+        }
+    </style>
+
+
+</head>
+<body>
+<!--顶部导航-->
+<!--第一块，search模块-->
+<div id="top-part"></div>
+<div id="search-part"></div>
+
+
+
+<table>
+    <tbody th:each="book:${bookPage.list}">
+        <tr>
+            <td><img style="width: 185px;" class="bookPic" th:src="@{/images/{address}(address=${book.bookAdress})}"></td>
+            <td th:text="${book.bookName}"></td>
+            <td th:text="${book.price}"></td>
+        </tr>
+
+    </tbody>
+    <li><a th:href="@{/book/getHotBooks(pageNum=1)}">首页</a></li>
+    <li th:if="${bookPage.hasPreviousPage}">
+        <li><a th:href="@{/book/getHotBooks(pageNum=${bookPage.pageNum}-1)}">上一页</a></li>
+    </li>
+
+    <li th:if="${bookPage.hasPreviousPage}">
+    <li><a th:href="@{/book/getHotBooks(pageNum=${bookPage.pageNum}+1)}">下一页</a></li>
+    </li>
+</table>
+
+
+</body>
+<script src="/js/jquery-1.11.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $("#top-part").load("/top-part.html");
+    $("#search-part").load("search-part.html");
+</script>
+
+
+</html>

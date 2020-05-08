@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>网上购物系统</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        .container {
+            background: cornsilk;
+            padding: 20px 20px 50px;
+        }
+        img {
+            width: 100%;
+        }
+        .btn-info{
+            width: 120px;
+            margin-left: 30px;
+        }
+        table.table-info tr td{
+            font-size: 16px;
+            height: 35px;
+            line-height: 35px;
+        }
+        table.table tr td:first-child {
+            text-align: right;
+        }
+        table.table tr td:last-child {
+            text-indent: 30px;
+        }
+        .radio-row{
+            display: inline-block;
+            width: 50px;
+            height: 30px;
+            margin-right: 20px;
+            position: relative;
+        }
+        .radio-row input,.radio-row input+a{
+            display: inline-block;
+            width: 50px;
+            height: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-indent: 0;
+            font-size: 14px;
+            text-align: center;
+            line-height: 30px;
+            color: #0e0e0e;
+        }
+        .radio-row input{
+            z-index: 10000;
+            opacity: 0;
+        }
+        .radio-row input+a {
+            border: 1px solid #ddd;
+        }
+        .radio-row input:checked+a {
+            border: 1px solid #c63205;
+            color: #c63205;
+        }
+        .panel-body img{
+            width: 70px;
+            height: 70px;
+            margin-right: 20px;
+        }
+
+
+
+        .room-number{
+            margin-left: 31px;
+        }
+        .desc,.bd-box{
+            float: left;
+        }
+        .desc{
+            width: 80px;
+            height: 36px;
+            font-size: 16px;
+            line-height: 36px;
+
+        }
+        .bd-box{
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+            vertical-align: middle;
+            background: #fff;
+        }
+        .addition,.subtraction{
+            width: 17px;
+            padding: 0 6px;
+            color: #727171;
+            font-size: 18px;
+            cursor: pointer;
+            border: 1px solid #d3d3d3;
+        }
+        .addition{
+            border-left: 0px;
+        }
+        .subtraction{
+            border-right: 0px;
+        }
+        .number-box{
+            width: 122px;
+            border: 1px solid #d3d3d3;
+        }
+    </style>
+</head>
+<body>
+<!--顶部导航-->
+<div th:replace="../templates/top-part"></div>
+<div id="search-part"></div>
+<!--主体内容-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-8" >
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">全部订单</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">未付款</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">评价</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content" style="overflow: hidden;display: block;min-height: 600px" >
+                <div id="home" class="tab-pane active" role="tabpanel" >
+                    <table class="table table-info">
+                        <thead>
+                        <tr>
+                            <th >订单编号</th>
+                            <th >下单时间</th>
+                            <th >订单价格</th>
+                            <th >订单状态</th>
+                            <th >订单管理</th>
+                        </tr>
+                        <tbody th:each="order:${orders}">
+                        <tr>
+                            <td th:text="${order.orderId}"></td>
+                            <td  th:text="${order.createTime}"></td>
+                            <td th:text="'￥'+${order.totalPrice}"></td>
+                            <td>
+                                <span th:if="${order.payState eq 0}">未付款</span>
+                                <span th:if="${order.payState eq 1}">未评价</span>
+                                <span th:if="${order.payState eq 2}">已评价</span>
+                            </td>
+                            <td><a th:if="${order.payState ne 0}" th:href="@{/order/getOrder0Info(orderId=${order.orderId})}">查看详情</a>
+                                <a th:if="${order.payState eq 0}" th:href="@{/order/getOrderInfo(orderId=${order.orderId})}">查看详情</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+                    <table class="table table-hover table-param">
+                        <thead>
+                            <tr>
+                                <th >订单编号</th>
+                                <th>下单时间</th>
+                                <th >订单价格</th>
+                                <th >订单状态</th>
+                                <th >订单管理</th>
+                            </tr>
+                        </thead>
+                        <tbody th:each="order_0:${order0}">
+                        <tr>
+                            <td  th:text="${order_0.orderId}"></td>
+                            <td  th:text="${order_0.createTime}"></td>
+                            <td th:text="'￥'+${order_0.totalPrice}"></td>
+                            <td>
+                                <span >未付款</span>
+                            </td>
+                            <td><a th:href="@{/order/getOrderInfo(orderId=${order_0.orderId})}">查看详情</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="messages">
+                    <table class="table table-hover table-param">
+                        <thead style="text-align: center">
+                        <tr>
+                            <th>订单编号</th>
+                            <th>下单时间</th>
+                            <th>订单价格</th>
+                            <th>订单状态</th>
+                            <th>订单管理</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="order_1:${order1}">
+                        <tr>
+                            <td th:text="${order_1.orderId}"></td>
+                            <td th:text="${order_1.createTime}"></td>
+                            <td th:text="'￥'+${order_1.totalPrice}"></td>
+                            <td>
+                                <span >已付款</span>
+                            </td>
+                            <td><a th:href="@{/order/getOrder0Info(orderId=${order_1.orderId})}">查看详情</a></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/js/jquery-1.11.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $("#top-part").load("/top-part.html");
+    $("#search-part").load("search-part.html");
+
+    $(function() {
+        /*单击加号按钮增加房间*/
+
+
+        $(".add").click(function () {
+            var count = $("#count").text();
+            var add = $(this).siblings(".number-box");
+            add.val(parseInt(add.val()) + 1)
+            if (parseInt(count)<= parseInt(add.val())){
+                add.val(count)
+            }
+            addRoom();
+        });
+
+        /*单击减号按钮减少房间*/
+        $(".min").click(function () {
+            var min = $(this).siblings(".number-box");
+            min.val(parseInt(min.val()) - 1)
+            if (parseInt(min.val()) < 1) {
+                min.val(1);
+            }
+            /*删除最后一个房间*/
+            $(".room2:last").remove();
+        });
+    });
+
+
+    $("#buyBtn").click(function () {
+        var bookCount1 = $("#bookCount").val();
+        var bookCount = parseInt(bookCount1);
+        var bookId = $("#bookId").val();
+        // var price=$("#price").val();
+        $.ajax( {
+            url:"/order/createOrder",
+            type:"post",
+            data:{count:bookCount,bookId:bookId},
+            success:function (data) {
+                if (data == "false"){
+                    alert("订单生成失败，请重试");
+                }else {
+                    window.location.href="/order/getOrderInfo?orderId="+data;
+                }
+            }
+        })
+    })
+    
+    $("#addToCart").click(function () {
+        var bookCount1 = $("#bookCount").val();
+        var bookCount = parseInt(bookCount1);
+        var bookId = $("#bookId").val();
+        $.ajax({
+            url:"/tradeCar/addToCart",
+            data:{count:bookCount,bookId:bookId},
+            success:function (data){
+                if (data == "1"){
+                    alert("加入购物车成功！");
+                }else alert("操作失败，请重试");
+            }
+
+        });
+    })
+</script>
+</html>

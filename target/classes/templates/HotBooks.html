@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>网上购物系统</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/sub-menu.css">
+    <style>
+        .container {
+            background: cornsilk;
+        }
+        .row.row-search {
+            padding: 30px 0 50px 0;
+            background: #fff;
+        }
+        .form-control{
+            height: 47px;
+        }
+        .btn-search{
+            padding: 9px 26px;
+            background: #e4393c;
+            color: #fff;
+            font-size: 19px;
+        }
+        .btn-search:hover {
+            color: #fff;
+            background-color: #f66060;
+        }
+        .goodslist div  img{
+            width: 100%;
+        }
+        .goodslist div p{
+            text-align: center;
+            margin: 5px 0 ;
+            color: #4d4d4d;
+        }
+
+        .bookPic{
+            height: 200px;
+            margin: 20px;
+        }
+        .bookNameSpan{
+            font-size: 14px;
+            color: #333;
+            line-height: 20px;
+            overflow: hidden;
+            margin: 8px auto;
+
+        }
+        .bookPriceSpan{
+            font-size: 18px;
+            color: #FF0036;
+            line-height: 18px;
+            margin: 10px auto;
+
+        }
+
+        .box a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #535353;
+            text-decoration: none;
+        }
+
+        .box a:hover {
+            color: #e52d67;
+        }
+        .bookNameSpan {
+            border: 1px hidden #535353;
+            padding: 3px 20px;
+            border-radius: 25px;
+            margin: 2px;
+        }
+        .box>a::after {
+            content: '';
+            width: 280px;
+            position: absolute;
+            background: #e52d67;
+            bottom: 0;
+            height: 0px;
+            transition: height 0.3s linear;
+            /*利用伪类高度，实现动画效果*/
+        }
+
+        .box>a:hover::after {
+            height: 10px;
+        }
+
+        .box:hover img {
+            transform: scale(1.15);
+        }
+
+        .box:hover .bookNameSpan {
+            background: #e52d67;
+            border-color: #e52d67;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<!--顶部导航-->
+<div th:replace="../templates/top-part"></div>
+<!--主体内容-->
+<div class="container">
+    <!--第一块，search模块-->
+    <div class="row row-search" >
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-5">
+            <div class="input-group">
+                <input type="text" class="form-control" autofocus placeholder="Search for...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-search" type="button" onclick="searchBtn()">搜索</button>
+                  </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="height: 43px;line-height: 43px;color: #fff;font-size: 16px; background: #f66060">
+            热门商品：
+        </div>
+    </div>
+    <div class="row goodslist" style="margin-top: 20px">
+        <table>
+            <tbody th:each="book:${bookPage.list}">
+            <tr>
+                <div class="col-md-3" >
+                    <a th:href="@{/book/getUserBookDetails(bookId=${book.bookId})}" class="bookLink" style="text-decoration: none">
+                        <div style="text-align: center;background-color: #FFFFFF;height: 280px;" class="box">
+                            <img style="width: 185px;" class="bookPic" th:src="@{/images/{bookAdress}(bookAdress=${book.bookAdress})}" onerror="this.src='/images/defultBookImg.jpg';this.onerror=null" alt="">
+                            <div style="text-align: center"><span class="bookNameSpan"  th:text="${book.bookName}"></span></div>
+                            <div style="text-align: center"><span class="bookPriceSpan" th:text="'￥'+${book.price}"></span></div>
+                        </div>
+                    </a>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+        <div class="col-md-7" style="margin-left: 40%">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li><a th:href="@{/book/getHotBooks(pageNum=1)}">首页</a></li>
+                    <li th:if="${bookPage.hasPreviousPage}">
+                        <a th:href="@{/book/getHotBooks(pageNum=${bookPage.pageNum}-1)}">上一页</a>
+                    </li>
+                    <li th:if="${bookPage.hasNextPage}">
+                        <a th:href="@{/book/getHotBooks(pageNum=${bookPage.pageNum}+1)}">下一页</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery-1.11.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function searchBtn(){
+        var key = $("#search-part-btn").val();
+        if (key ==null || key ==''){
+            alert("请输入有效关键词");
+        } else{
+            window.location.href="/book/searchBook?key="+key;
+        }
+
+    }
+</script>
+
+</html>

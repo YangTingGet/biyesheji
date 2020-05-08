@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+
+	<head>
+		<meta charset="utf-8" />
+		<title>后台管理系统</title>
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/sub-menu.css">
+
+	</head>
+	<link rel="stylesheet" href="/css/sys.css" />
+	<style type="text/css">
+		body {
+			min-width: 1220px;
+		}
+		tr {
+			height: 40px;
+		}
+
+		.gysz-table-tbody {
+			overflow-y: scroll;
+			-ms-overflow-style: none;
+			overflow: -moz-scrollbars-none;
+			scrollbar-width: none;
+			background: white;
+		}
+
+		.gysz-table-tbody ::-webkit-scrollbar {
+			display: none;
+		}
+
+		.gysz-table-head th {
+			border-bottom: 1px solid transparent !important;
+			text-align: center;
+		}
+
+		td {
+			text-align: center;
+		}
+	</style>
+
+	<body>
+		<div class="top">
+			<img src="/images/logo.png" alt="" class="logo-img" />
+			<span class="logo-text">二手书交流平台平台</span>
+			<span class="erji-text"><em>服务管理系统</em></span>
+			<div class="top-right">
+				<div class="top-right-list" id="message">
+					<img src="/images/info.png" alt="" style="width: 20px;" />&nbsp;<span>消息公告</span>
+					<div class="message-hide">
+						<div class="message-hide-list">消息公告列表</div>
+						<div class="message-hide-list">消息公告列表</div>
+						<div class="message-hide-list">消息公告列表</div>
+						<div class="message-hide-list">消息公告列表</div>
+						<div class="message-hide-list">消息公告列表</div>
+					</div>
+				</div>
+				<div class="top-right-list"><img src="/images/help.png" alt="" style="width: 20px;" />&nbsp;<span>帮助中心</span></div>
+				<div class="top-right-list" id="user">
+					<img src="/images/toux.png" alt="" />&nbsp;<span>张飞</span>
+					<div class="userInfo-hide">
+						<div class="userInfo-hide-title">张飞</div>
+						<div class="userInfo-list">工号:1001</div>
+						<div class="userInfo-list go-back-img" style="text-align: center;">
+							退出登录
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="navs">
+			<div class="navs-lists" id="nav-lists">
+				<div class="list"><a href="/system/getAllUser">用户管理</a></div>
+				<div class="list selected-list">图书管理</div>
+				<div class="list"><a href="/system/getAllOrders">订单管理</a></div>
+				<div class="list"><a href="/system/getAllComments">评论管理</a></div>
+			</div>
+			<div class="navs-sz">
+				<span>欢迎您:张飞</span>&nbsp;&nbsp;
+				<span id="pDate"></span>&nbsp;&nbsp;
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="fenge"></div>
+		<!--下方内容-->
+		<div class="cons" style="width: 100%">
+			<!--<iframe src="/home1.html" id="mainFrame" name="main" frameborder="0" width="100%" height="100%" scrolling="no"></iframe>-->
+			<div style="width: 30%;height: 500px;margin: 50px;float: left" id="bookSales"></div>
+
+			<div style="width: 50%;height:520px;margin: 50px;float: right" id="bookList">
+				<div class="topp">
+					<div class="tit"><img src="img/dian.png" alt="" class="tit-img" />&nbsp;图书信息管理</div>
+				</div>
+				<div class="yshf-table" style="width: 100%;margin-top:10px;">
+					<div class="gysz-table-head" style="width: 100%;">
+						<table border="1" cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse;">
+							<tr>
+								<th width="10%">图书编号</th>
+								<th width="15%">图书名称</th>
+								<th width="16%">作者</th>
+								<th width="10%">图书成色</th>
+								<th width="10%">图书价格</th>
+								<th width="16%">上架时间</th>
+								<th width="10%">销量</th>
+								<th width="10%">操作</th>
+							</tr>
+						</table>
+					</div>
+					<div class="gysz-table-tbody" style="width: 100%;height:321px;background: white;">
+						<table border="1" cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse;">
+							<tbody th:each="book:${bookPage.list}">
+								<tr>
+									<td width="10%" th:text="${book.bookId}"></td>
+									<td width="15%" th:text="${book.bookName}"></td>
+									<td width="16%" th:text="${book.author}"></td>
+									<td width="10%" th:text="${book.quality}"></td>
+									<td width="10%" th:text="'￥'+${book.price}"></td>
+									<td width="16%" th:text="${book.saletime}"></td>
+									<td width="10%" th:text="${book.sales}"></td>
+									<td width="10%" ><a th:onclick="|deleteBook(${book.bookId} )|">删除</a></td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+					<div class="col-md-7" style="margin-left: 40%">
+						<nav aria-label="Page navigation">
+							<ul class="pagination">
+								<li >
+									<a th:href="@{/system/getAllBooks(pageNum=1)}" style="background: #e7e3e8">首页</a>
+								</li>
+								<li th:if="${bookPage.hasPreviousPage}">
+									<a th:href="@{/system/getAllBooks(pageNum=${bookPage.pageNum}-1)}" style="background: #e7e3e8">上一页</a>
+								</li>
+								<li th:if="${bookPage.hasNextPage}" >
+									<a th:href="@{/system/getAllBooks(pageNum=${bookPage.pageNum}+1)}" style="background: #e7e3e8">下一页</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+			</div>
+			</div>
+		</div>
+
+	</body>
+	<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+
+	<script src="/js/sys.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			
+			var str = window.screen.availHeight -200;
+				$(".cons").css({
+					"min-height": str
+				})
+			var arr = [{
+					tit: "首页",
+					urls: "home1.html"
+				},
+				{
+					tit: "系统概况",
+					urls: "home2.html"
+				},
+				{
+					tit: "系统维护",
+					urls: "home3.html"
+				},
+				{
+					tit: "系统管理",
+					urls: "home4.html"
+				},
+				{
+					tit: "日志管理",
+					urls: "home5.html"
+				}
+			]
+
+			function navList() {
+				for(var i = 0; i < arr.length; i++) {
+					var html = "";
+					html += "<div class='list'>";
+					html += "<a href='" + arr[i].urls + "'  target='main'>" + arr[i].tit + "</a>";
+					html += "</div>";
+					$("#nav-lists").append(html)
+				};
+				$(".list a").eq(0).addClass("selected-list");
+			};
+			// navList();
+
+			$(".go-back-img").on("click", function() {
+				window.location.href = "/system/outLoginAdmin"
+			})
+
+		});
+
+		function deleteBook(bookId) {
+			$.ajax({
+				url:"/system/deleteBook",
+				data:{bookId:bookId},
+				type:"post",
+				success:function (data) {
+					if (data == "ok"){
+						alert("删除成功");
+						window.location.reload();
+					} else {
+						alert("删除失败，请重试");
+					}
+				}
+			})
+		}
+	</script>
+	<script src="/js/echarts.js"></script>
+	<script type="text/javascript">
+		var myChart = echarts.init(document.getElementById('bookSales'));
+		var names=[];
+		var values=[];
+		//数据加载完之前先显示一段简单的loading动画
+		myChart.showLoading();
+		$.ajax({
+			type : "post",
+			async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+			url : "/system/getBar",    //请求发送到dataActiont处
+			data : {},
+			dataType : "json",        //返回数据形式为json
+			success : function(result) {
+				//请求成功时执行该函数内容，result即为服务器返回的json对象
+				if (result) {
+					for(var i=0;i<result.length;i++){
+						names.push(result[i].mainName);
+						values.push(result[i].value);
+					}
+					myChart.hideLoading();    //隐藏加载动画
+					myChart.setOption(
+							{
+								title: {
+									text: '商品销量前五'
+								},
+								tooltip: {},
+								legend: {
+									data:['销量']
+								},
+								xAxis: {
+									data: names
+								},
+								yAxis: {},
+								series: [{
+									name: '销量',
+									type: 'bar',
+									data: values
+								}]
+							}
+					);
+				}
+			},
+			error : function(errorMsg) {
+				//请求失败时执行该函数
+				alert("图表请求数据失败!");
+				myChart.hideLoading();
+			}
+		});
+	</script>
+</html>

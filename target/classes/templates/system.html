@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>网上购物系统</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        .container {
+            background: cornsilk;
+            padding: 20px 20px 50px;
+        }
+        img {
+            width: 100%;
+        }
+        .btn-info{
+            width: 120px;
+            margin-left: 30px;
+        }
+        table.table-info tr td{
+            font-size: 16px;
+            height: 35px;
+            line-height: 35px;
+        }
+        table.table tr td:first-child {
+            text-align: right;
+        }
+        table.table tr td:last-child {
+            text-indent: 30px;
+        }
+        .radio-row{
+            display: inline-block;
+            width: 50px;
+            height: 30px;
+            margin-right: 20px;
+            position: relative;
+        }
+        .radio-row input,.radio-row input+a{
+            display: inline-block;
+            width: 50px;
+            height: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-indent: 0;
+            font-size: 14px;
+            text-align: center;
+            line-height: 30px;
+            color: #0e0e0e;
+        }
+        .radio-row input{
+            z-index: 10000;
+            opacity: 0;
+        }
+        .radio-row input+a {
+            border: 1px solid #ddd;
+        }
+        .radio-row input:checked+a {
+            border: 1px solid #c63205;
+            color: #c63205;
+        }
+        .panel-body img{
+            width: 70px;
+            height: 70px;
+            margin-right: 20px;
+        }
+
+
+
+        .room-number{
+            margin-left: 31px;
+        }
+        .desc,.bd-box{
+            float: left;
+        }
+        .desc{
+            width: 80px;
+            height: 36px;
+            font-size: 16px;
+            line-height: 36px;
+
+        }
+        .bd-box{
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+            vertical-align: middle;
+            background: #fff;
+        }
+        .addition,.subtraction{
+            width: 17px;
+            padding: 0 6px;
+            color: #727171;
+            font-size: 18px;
+            cursor: pointer;
+            border: 1px solid #d3d3d3;
+        }
+        .addition{
+            border-left: 0px;
+        }
+        .subtraction{
+            border-right: 0px;
+        }
+        .number-box{
+            width: 122px;
+            border: 1px solid #d3d3d3;
+        }
+    </style>
+    <script src="/js/echarts.js"></script>
+</head>
+<body>
+<!--顶部导航-->
+
+<!--主体内容-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-8" >
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">图书销量</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">每日销量</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">数据操作</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content" style="height:600px;width: 750px" >
+                <div id="home" class="tab-pane active" role="tabpanel"  style="width: 100%;height: 460px;margin-top: 20px"></div>
+
+                <div role="tabpanel" class="tab-pane" id="profile" style="width: 750px;height: 460px;margin-top: 20px"></div>
+
+                <div role="tabpanel" class="tab-pane" id="messages" style="width: 750px;height: 460px;margin-top: 20px">
+
+
+                    <div class="container">
+                        <a href="/system/exportOrders"><button type="button" class="btn btn-success save" >导出数据</button></a>
+
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/js/jquery-1.11.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('home'));
+    var names=[];
+    var values=[];
+    //数据加载完之前先显示一段简单的loading动画
+    myChart.showLoading();
+    $.ajax({
+        type : "post",
+        async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url : "/system/getBar",    //请求发送到dataActiont处
+        data : {},
+        dataType : "json",        //返回数据形式为json
+        success : function(result) {
+            //请求成功时执行该函数内容，result即为服务器返回的json对象
+            if (result) {
+                for(var i=0;i<result.length;i++){
+                    names.push(result[i].mainName);
+                    values.push(result[i].value);
+                }
+                myChart.hideLoading();    //隐藏加载动画
+                myChart.setOption(
+                    {
+                        title: {
+                            text: '商品销量前五'
+                        },
+                        tooltip: {},
+                        legend: {
+                            data:['销量']
+                        },
+                        xAxis: {
+                            data: names
+                        },
+                        yAxis: {},
+                        series: [{
+                            name: '销量',
+                            type: 'bar',
+                            data: values
+                        }]
+                    }
+                );
+            }
+        },
+        error : function(errorMsg) {
+            //请求失败时执行该函数
+            alert("图表请求数据失败!");
+            myChart.hideLoading();
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    var myChart2 = echarts.init(document.getElementById('profile'));
+    var xvalues =[];
+    var yvalues =[];
+
+    myChart2.showLoading();
+    $.ajax({
+        url:"system/getSalesInDay",
+        type:'get',
+        dataType:'json',
+        success:function(data){
+            if (data) {
+                for(var i=0;i<data.length;i++){
+                    xvalues.push(data[i].mainId);
+                    yvalues.push(data[i].value);
+                }
+                myChart2.hideLoading();    //隐藏加载动画
+                myChart2.setOption(
+                    {
+                        title: {
+                            text: '每日销量'
+                        },
+                        tooltip: {},
+                        legend: {
+                            data:['销量']
+                        },
+                        xAxis: {
+                            data: xvalues
+                        },
+                        yAxis: {},
+                        series: [{
+                            name: '销量',
+                            type: 'line',
+                            areaStyle: {
+                                normal: {color: '#80ffc0'}
+                            },
+                            data: yvalues
+                        }]
+                    }
+                );
+            }
+        },
+        error:function(){
+            alert("数据加载失败！请检查数据链接是否正确");
+        }
+    });
+    // 初次加载图表
+    myChart2.setOption(option);
+</script>
+</html>

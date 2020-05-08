@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yt.bishe.dao.VIPOrderDao">
+
+
+
+    <insert id="insertVIPOrder" >
+        insert into vip_order (user_name,price,order_id)
+            values (#{0},#{1},#{2})
+    </insert>
+
+    <update id="updateVIPId">
+        update vip_order set vip_id=#{1} where order_id=#{0}
+    </update>
+
+    <select id="getVIPOrder" resultType="VIPOrder">
+        select * from vip_order where order_id =#{0}
+    </select>
+
+</mapper>

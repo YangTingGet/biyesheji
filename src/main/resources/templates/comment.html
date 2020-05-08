@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>网上购物系统</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        .container {
+
+        }
+        img{
+            width: 100%;
+        }
+        ul{
+            border: 0;
+        }
+        .list-address li{
+            border: 0;
+            list-style: none;
+            margin-right: 20px;
+            background: url("/images/address.png") no-repeat;
+            height: 162px;
+            width: 240px;
+            background-position: -240px 0;
+        }
+        .list-address li:hover{
+            background-position: -480px 0;
+        }
+        .list-address li.active,.list-address li.active:hover{
+            background-position: 0 0;
+        }
+        .table>tbody>tr>td,.table>tbody>tr>th{
+            position: relative;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            border-top: 0;
+        }
+        p {
+            margin: 5px 0 5px 0;
+        }
+        h3{
+            margin-top: 0;
+        }
+        .footer{
+            height: 40px;
+            line-height: 40px;
+            text-align: right;
+            margin-bottom: 80px;
+        }
+        select{
+            -webkit-appearance: none;
+            height: 32px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+    </style>
+</head>
+<body>
+<!--顶部导航-->
+<div th:replace="../templates/top-part"></div>
+<!--主体内容-->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12" style="margin-top: 30px">
+            <h3 class="title">商品信息</h3>
+            <table class="table " style="margin-top: 10px">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="text-align: center">商品信息</th>
+                        <th style="text-align: center">子订单编号</th>
+                        <th style="text-align: center">金额（元）</th>
+                        <th style="text-align: center">数量</th>
+                        <th style="text-align: center">小计（元）</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr>
+                        <td class="col-sm-1">
+                            <img th:src="@{/images/{bookAdress}(bookAdress=${chidOrder.bookPic})}" onerror="this.src='/images/defultBookImg.jpg';this.onerror=null" alt="">
+                        </td>
+                        <td><br><span th:text="${chidOrder.bookName}"></span></td>
+                        <td><br><span th:text="${chidOrder.chidOrderId}" ></span></td>
+                        <td><br><span th:text="${chidOrder.price}"></span></td>
+                        <td><br><span th:text="${chidOrder.count}"></span></td>
+                        <td><br><span th:text="${chidOrder.price}" ></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input id="bookId" type="hidden" th:value="${chidOrder.bookId}">
+            <input id="pId" type="hidden" th:value="${chidOrder.pOrderId}">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <textarea maxlength="200" placeholder="写下您的评论" autofocus id="content" cols="25" rows="5"> </textarea>
+        <button type="button" class="btn btn-primary" id="subComment">添加评论</button>
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery-1.11.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/area.js"></script>
+<script type="text/javascript">
+    $("#top-part").load("/top-part.html");
+
+    $("#subComment").click(function () {
+         var bookId = $("#bookId").val();
+        var content = $("#content").val();
+        var pId =$("#pId").val();
+        $.ajax({
+            url:"/comment/addComment",
+            data:{bookId:bookId,content:content,pId:pId},
+            async:false,
+            dataType:"json",
+            success:function (data) {
+                if (data == "1"){
+                    alert("评论添加成功，即将返回主订单表");
+                    window.location.href="/order/getOrder0Info?orderId="+pId;
+                }else alert("评论添加失败，请重试");
+            }
+        })
+    })
+
+</script>
+</html>

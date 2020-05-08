@@ -1,0 +1,107 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    /*!*横轴居中*!*/
+    /*align-items: center;*/
+    /*纵轴居中*/
+}
+
+header {
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 35px;
+    color: #e52d67;
+}
+
+#app {
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.box {
+    width: 280px;
+    overflow: hidden;
+    background: #f6f6f6;
+    box-sizing: border-box;
+    padding: 0 15px 25px 15px;
+}
+
+.box a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #535353;
+    text-decoration: none;
+}
+
+.box a:hover {
+    color: #e52d67;
+}
+
+.imgBox {
+    width: 280px;
+    height: 220px;
+    overflow: hidden;
+}
+
+.imgBox img {
+    width: 100%;
+    height: 100%;
+    transition: all 0.6s linear;
+}
+
+.source {
+    border: 1px solid #535353;
+    padding: 6px 20px;
+    border-radius: 25px;
+    margin: 20px;
+}
+
+.title {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.detail {
+    font-size: 14px;
+    line-height: 160%;
+    text-align: justify;
+    width: 100%;
+}
+
+/*鼠标hover效果*/
+
+.box>a::after {
+    content: '';
+    width: 280px;
+    position: absolute;
+    background: #e52d67;
+    bottom: 0;
+    height: 0px;
+    transition: height 0.3s linear;
+    /*利用伪类高度，实现动画效果*/
+}
+
+.box>a:hover::after {
+    height: 10px;
+}
+
+.box:hover img {
+    transform: scale(1.15);
+}
+
+.box:hover .source {
+    background: #e52d67;
+    border-color: #e52d67;
+    color: #ffffff;
+}

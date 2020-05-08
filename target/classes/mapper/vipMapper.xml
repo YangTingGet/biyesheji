@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yt.bishe.dao.VipDao">
+
+    <resultMap type="com.yt.bishe.entity.Vip" id="VipMap">
+        <!-- property对应实体类的属性名称，column为数据库结果集的列的名称 -->
+        <id property="id" column="id" />
+        <result property="userName" column="user_name"/>
+        <result property="vipLevel" column="vip_level"/>
+        <result property="startTime" column="start_time"/>
+        <result property="duringTime" column="during_time"/>
+        <result property="endTime" column="end_time"/>
+    </resultMap>
+
+
+    <insert id="insertVip" parameterType="Vip">
+        insert into vip (user_name,vip_level,start_time,end_time)
+            values (#{userName},#{vipLevel},now(),date_add(now(), interval 1 MONTH))
+    </insert>
+
+    <update id="updateVip" >
+        update vip set vip_level=#{1},start_time=now(),end_time=date_add(now(), interval 1 MONTH) where user_name=#{0}
+    </update>
+
+    <select id="selectVIPIdByUserName" resultType="Integer">
+        select id from vip where user_name =#{0}
+    </select>
+
+    <select id="getVipInfo" resultMap="VipMap">
+        select * from vip where user_name =#{0}
+    </select>
+
+    <delete id="deleteVIP" >
+        delete from vip where user_name =#{0}
+    </delete>
+</mapper>
