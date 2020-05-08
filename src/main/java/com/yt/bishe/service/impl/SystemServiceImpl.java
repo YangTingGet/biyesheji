@@ -13,7 +13,11 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public boolean adminLoginCheck(String adminName, String password) {
         String pwd =adminDao.selectPassword(adminName);
-        boolean flag = pwd.equals(password);
-        return  flag ;
+        if (pwd == null) {
+            return false;
+        }else {
+            boolean flag = pwd.equals(password);
+            return flag;
+        }
     }
 }

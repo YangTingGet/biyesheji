@@ -56,6 +56,8 @@ public class UserController {
             else return 0;
         }else if (flag == "1"){
             return 1;
+        }else if (flag == "3"){
+            return 4;
         }else
             return 2;
     }

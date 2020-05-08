@@ -32,15 +32,19 @@ public class UserServiceImpl implements UserService {
     public String loginCheck(String userName,String password){
 
         User user = userDao.queryUserInfo(userName);
-        System.out.println(user.getState());
-        if (user.getState()!=0){
-            return "1";
+        if (user == null){
+            return "3";
+        }else {
+                System.out.println(user.getState());
+                if (user.getState()!=0){
+                    return "1";
+                }
+                else if (password.equals(user.getPassword()))
+                    return "0";
+                else
+                    return "2";
+            }
         }
-        else if (password.equals(user.getPassword()))
-            return "0";
-        else
-            return "2";
-    }
 
     @Override
     public boolean checkUserName(String userName){
